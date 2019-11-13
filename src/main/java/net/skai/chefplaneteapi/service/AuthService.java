@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-public interface UserService {
+public interface AuthService {
 
     @NotNull
     boolean userExists(@NotNull final String userId);

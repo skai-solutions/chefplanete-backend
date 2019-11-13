@@ -17,9 +17,9 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class AuthServiceImpl implements AuthService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     private final JwtTokenProvider tokenProvider;
 
@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     private final GoogleIdTokenVerifier idTokenVerifier;
 
-    public UserServiceImpl(@NotNull final JwtTokenProvider tokenProvider,
+    public AuthServiceImpl(@NotNull final JwtTokenProvider tokenProvider,
                            @NotNull final GoogleIdTokenVerifier idTokenVerifier) {
         this.tokenProvider = tokenProvider;
         this.inMemoryUserIds = new ArrayList<>();

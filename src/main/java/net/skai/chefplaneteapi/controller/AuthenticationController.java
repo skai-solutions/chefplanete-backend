@@ -1,13 +1,12 @@
 package net.skai.chefplaneteapi.controller;
 
 import net.skai.chefplaneteapi.domain.response.AuthResponse;
-import net.skai.chefplaneteapi.service.UserService;
+import net.skai.chefplaneteapi.service.AuthService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
@@ -18,10 +17,10 @@ import java.security.Principal;
 @RestController
 public class AuthenticationController {
 
-    private UserService userService;
+    private AuthService authService;
 
-    public AuthenticationController(@NotNull final UserService userService) {
-        this.userService = userService;
+    public AuthenticationController(@NotNull final AuthService authService) {
+        this.authService = authService;
     }
 
     @GetMapping("/auth/user")
@@ -31,11 +30,11 @@ public class AuthenticationController {
 
     @GetMapping("/auth/signin/{idToken}")
     public ResponseEntity<AuthResponse> signIn(@NotNull @PathVariable final String idToken) {
-        return new ResponseEntity<>(userService.login(idToken), HttpStatus.OK);
+        return new ResponseEntity<>(authService.login(idToken), HttpStatus.OK);
     }
 
     @GetMapping("/auth/signup/{idToken}")
     public ResponseEntity<AuthResponse> signUp(@NotNull @PathVariable final String idToken) {
-        return new ResponseEntity<>(userService.signup(idToken), HttpStatus.OK);
+        return new ResponseEntity<>(authService.signup(idToken), HttpStatus.OK);
     }
 }
