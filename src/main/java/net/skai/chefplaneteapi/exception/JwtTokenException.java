@@ -1,4 +1,4 @@
-package net.skai.chefplaneteapi.service.auth.exception;
+package net.skai.chefplaneteapi.exception;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;

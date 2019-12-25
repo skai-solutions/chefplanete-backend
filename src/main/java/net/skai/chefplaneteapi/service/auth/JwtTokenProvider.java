@@ -5,7 +5,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import net.skai.chefplaneteapi.domain.Role;
-import net.skai.chefplaneteapi.service.auth.exception.JwtTokenException;
+import net.skai.chefplaneteapi.exception.JwtTokenException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -85,9 +85,3 @@ public class JwtTokenProvider {
         }
     }
 }
-
-/**
- * 1. Login using Open Id
- * 2. Get JWT token from response
- * 3. Use JWT token for subsequent requests to backend
- */

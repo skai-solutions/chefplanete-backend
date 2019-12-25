@@ -1,6 +1,6 @@
 package net.skai.chefplaneteapi.service.auth;
 
-import net.skai.chefplaneteapi.service.auth.exception.AuthenticationException;
+import net.skai.chefplaneteapi.exception.AuthenticationException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
