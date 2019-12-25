@@ -1,0 +1,6 @@
+FROM mongo:4.0
+
+COPY rootfs/ /
+ENV MONGO_INITDB_ROOT_USERNAME="mongo-root"
+ENV MONGO_INITDB_ROOT_PASSWORD="password"
+ENV MONGO_INITDB_DATABASE="chefplanete"
