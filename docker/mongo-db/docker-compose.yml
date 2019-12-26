@@ -1,0 +1,10 @@
+version: '3'
+services:
+  mongo-db:
+    build: .
+    ports:
+      - 27017:27017
+    volumes:
+      - database:/data/db
+volumes:
+  database:
