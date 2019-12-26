@@ -65,7 +65,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleAuthenticationException(@NotNull final AuthenticationException ex){
         logger.error(ex.getMessage(), ex);
         final ApiErrorResponse errorResponse = new ApiErrorResponse(
-                HttpStatus.UNAUTHORIZED,
+                ex.getHttpStatus(),
                 ex.getMessage()
         );
         return buildResponse(errorResponse);

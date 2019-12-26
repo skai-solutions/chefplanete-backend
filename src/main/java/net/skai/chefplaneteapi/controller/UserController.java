@@ -2,13 +2,11 @@ package net.skai.chefplaneteapi.controller;
 
 import net.skai.chefplaneteapi.domain.User;
 import net.skai.chefplaneteapi.exception.AuthenticationException;
+import net.skai.chefplaneteapi.exception.UserExistsException;
 import net.skai.chefplaneteapi.service.UserService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -35,7 +33,17 @@ public class UserController extends AbstractApiController {
                            @NotNull final Principal principal) {
         if (principal.getName().equals(userId)) {
             userService.deleteUserById(userId);
+            return;
         }
         throw new AuthenticationException("You are not authorized for this action.", HttpStatus.UNAUTHORIZED);
+    }
+
+    @PostMapping("/user")
+    public void addUser(@NotNull @RequestBody final User user) {
+        if (!userService.userExists(user.getUserId())) {
+            userService.addUser(user);
+            return;
+        }
+        throw new UserExistsException("User already exists.");
     }
 }
