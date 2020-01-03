@@ -40,7 +40,8 @@
 								"auth",
 								"user"
 							]
-						}
+						},
+						"description": "This is kind of to test if you have a valid token or not, fill in the jwt environment variable with the token you receieved from registering or signing in."
 					},
 					"response": []
 				},
@@ -93,7 +94,8 @@
 								"signup",
 								"{{id_token}}"
 							]
-						}
+						},
+						"description": "Get the id_token from this OAuth Playground Link: https://developers.google.com/oauthplayground/#step1&scopes=profile%20email%20openid&auth_code=4%2FvAEb3jXmIIegx_bzeak9bAv4lUman-UJAU_xs_cn22y7HBdi19z1TUBBZ7cSUBEeFBXE0DdmN2HFxN7UuT98ZRg&refresh_token=1%2F%2F04engTnK_IUhtCgYIARAAGAQSNwF-L9IrdU5YtysLtRnPftboaEz-eSXKfxRcpc5KqaimTOWLVHD-gjOVdrHsfG-U78-VmliBgSY&access_token_field=ya29.Il-4B9ZukR3eySk7S1XloIMhKDfjAPXo4zBNYJeRGK9L57frMWIA8PJ5OZU7zniNe2zx01LvP1OqIcrHHHm5GtvSiaeHCW4V87F_Qt5rNkDdHTAkCMyYMLzm2tcp-z49Ow&url=https%3A%2F%2F&content_type=application%2Fjson&http_method=GET&useDefaultOauthCred=checked&oauthEndpointSelect=Google&oauthAuthEndpointValue=https%3A%2F%2Faccounts.google.com%2Fo%2Foauth2%2Fv2%2Fauth&oauthTokenEndpointValue=https%3A%2F%2Fwww.googleapis.com%2Foauth2%2Fv4%2Ftoken&oauthClientId=269141253852-k5l3rnk3r9guv45i4ovsi8haoc91qpmp.apps.googleusercontent.com&expires_in=3599&oauthClientSecret=FigyJoqHGLZAgLXW5tYvn2zH&access_token_issue_date=1578069736&for_access_token=ya29.Il-4B9ZukR3eySk7S1XloIMhKDfjAPXo4zBNYJeRGK9L57frMWIA8PJ5OZU7zniNe2zx01LvP1OqIcrHHHm5GtvSiaeHCW4V87F_Qt5rNkDdHTAkCMyYMLzm2tcp-z49Ow&includeCredentials=checked&accessTokenType=bearer&autoRefreshToken=unchecked&accessType=offline&prompt=consent&response_type=code&wrapLines=on\n\nYou have to go to step 1 and fill in scopes: \"profile email openid\", then authorize by signing in with google."
 					},
 					"response": []
 				}
@@ -208,6 +210,123 @@
 							]
 						},
 						"description": "This is kind of misleading since it lets you send an ID, but this endpoint will only let the user delete their own account not other people's accounts."
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Dietary Profile",
+			"item": [
+				{
+					"name": "Dietary Profile: Get Dietary Profile by Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}:{{port}}/api/user/{{userId}}/profile",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"user",
+								"{{userId}}",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dietary Profile: Update Dietary Profile by Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userId\": \"{{userId}}\",\n\t\"cookingLevel\": 1,\n\t\"totalGoalsCompleted\": null,\n\t\"foodRestrictions\": [\n\t\t\"Peanuts\"\n\t]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/api/user/{{userId}}/profile",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"user",
+								"{{userId}}",
+								"profile"
+							]
+						},
+						"description": "Don't change the userId field since that is always needed. You only need to fill in fields which you are updating, other fields can be left as null."
+					},
+					"response": []
+				},
+				{
+					"name": "Dietary Profile: Delete Dietary Provile by Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}:{{port}}/api/user/{{userId}}/profile",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"user",
+								"{{userId}}",
+								"profile"
+							]
+						},
+						"description": "This is purely a dev feature for removing profiles, you should never have to do this since removing a User removes their profile. This also only lets the user delete their own profile."
 					},
 					"response": []
 				}
