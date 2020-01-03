@@ -1,6 +1,7 @@
 package net.skai.chefplaneteapi.domain;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
@@ -12,16 +13,19 @@ public class DietaryProfile {
     @Id
     private final String userId;
 
+    @Nullable
     private Integer cookingLevel;
 
+    @Nullable
     private Integer totalGoalsCompleted;
 
+    @Nullable
     private List<String> foodRestrictions;
 
     public DietaryProfile(@NotNull final String userId,
-                          @NotNull final Integer cookingLevel,
-                          @NotNull final Integer totalGoalsCompleted,
-                          @NotNull final List<String> foodRestrictions) {
+                          @Nullable final Integer cookingLevel,
+                          @Nullable final Integer totalGoalsCompleted,
+                          @Nullable final List<String> foodRestrictions) {
         this.userId = userId;
         this.cookingLevel = cookingLevel;
         this.totalGoalsCompleted = totalGoalsCompleted;
@@ -29,7 +33,7 @@ public class DietaryProfile {
     }
 
     public DietaryProfile(@NotNull final String userId,
-                          @NotNull final Integer cookingLevel) {
+                          @Nullable final Integer cookingLevel) {
         this.userId = userId;
         this.cookingLevel = cookingLevel;
         this.totalGoalsCompleted = 0;
@@ -47,6 +51,7 @@ public class DietaryProfile {
         return userId;
     }
 
+    @Nullable
     public Integer getCookingLevel() {
         return cookingLevel;
     }
@@ -55,6 +60,7 @@ public class DietaryProfile {
         this.cookingLevel = cookingLevel;
     }
 
+    @Nullable
     public Integer getTotalGoalsCompleted() {
         return totalGoalsCompleted;
     }
@@ -63,6 +69,7 @@ public class DietaryProfile {
         this.totalGoalsCompleted = totalGoalsCompleted;
     }
 
+    @Nullable
     public List<String> getFoodRestrictions() {
         return foodRestrictions;
     }
