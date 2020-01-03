@@ -11,7 +11,7 @@ import java.util.Objects;
 public class DietaryProfile {
 
     @Id
-    private final String userId;
+    private String userId;
 
     @Nullable
     private Integer cookingLevel;
@@ -21,6 +21,9 @@ public class DietaryProfile {
 
     @Nullable
     private List<String> foodRestrictions;
+
+    public DietaryProfile() {
+    }
 
     public DietaryProfile(@NotNull final String userId,
                           @Nullable final Integer cookingLevel,
@@ -56,7 +59,7 @@ public class DietaryProfile {
         return cookingLevel;
     }
 
-    public void setCookingLevel(Integer cookingLevel) {
+    public void setCookingLevel(@Nullable final Integer cookingLevel) {
         this.cookingLevel = cookingLevel;
     }
 
@@ -65,7 +68,7 @@ public class DietaryProfile {
         return totalGoalsCompleted;
     }
 
-    public void setTotalGoalsCompleted(Integer totalGoalsCompleted) {
+    public void setTotalGoalsCompleted(@Nullable final Integer totalGoalsCompleted) {
         this.totalGoalsCompleted = totalGoalsCompleted;
     }
 
@@ -74,7 +77,7 @@ public class DietaryProfile {
         return foodRestrictions;
     }
 
-    public void setFoodRestrictions(List<String> foodRestrictions) {
+    public void setFoodRestrictions(@Nullable final List<String> foodRestrictions) {
         this.foodRestrictions = foodRestrictions;
     }
 
