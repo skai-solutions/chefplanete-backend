@@ -1,7 +1,7 @@
 db.createCollection("user");
 db.createCollection("dietaryProfile");
 db.createCollection("pantry");
-db.createCollection("weeklySchedule");
+db.createCollection("weeklyGoals");
 db.createUser({
     user: "chef",
     pwd: "password",
