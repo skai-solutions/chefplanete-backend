@@ -332,6 +332,91 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Pantry",
+			"item": [
+				{
+					"name": "Pantry: Get Pantry by User Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}:{{port}}/api/user/{{userId}}/profile",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"user",
+								"{{userId}}",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pantry: Update Pantry by User Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"C_SWS\": {\n\t\t\"name\": \"Swiss Cheese\",\n\t\t\"quantity\": 200,\n\t\t\"unitName\": \"grams\"\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/api/user/{{userId}}/pantry",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"user",
+								"{{userId}}",
+								"pantry"
+							]
+						},
+						"description": "Don't change the userId field since that is always needed. You only need to fill in fields which you are updating, other fields can be left as null."
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"protocolProfileBehavior": {}
