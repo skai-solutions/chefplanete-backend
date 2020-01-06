@@ -28,18 +28,6 @@ public class DietaryProfileController extends AbstractApiController {
         throw new AuthenticationException("You are not authorized for this action.", HttpStatus.UNAUTHORIZED);
     }
 
-    @DeleteMapping("/user/{userId}/profile")
-    public void deleteProfile(@NotNull @PathVariable("userId") final String userId,
-                              @NotNull final Principal principal) {
-        if (principal.getName().equals(userId)) {
-            if (!dietaryProfileService.deleteDietaryProfileById(userId)) {
-                throw new UserNotFoundException(userId);
-            }
-            return;
-        }
-        throw new AuthenticationException("You are not authorized for this action.", HttpStatus.UNAUTHORIZED);
-    }
-
     @PutMapping("/user/{userId}/profile")
     public void updateProfile(@NotNull @PathVariable("userId") final String userId,
                               @NotNull @RequestBody DietaryProfile dietaryProfile,

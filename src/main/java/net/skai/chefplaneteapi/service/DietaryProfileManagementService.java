@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class DietaryProfileManagementService implements DietaryProfileService {
 
-    public final DietaryProfileRepository dietaryProfileRepository;
+    private final DietaryProfileRepository dietaryProfileRepository;
 
     public DietaryProfileManagementService(@NotNull final DietaryProfileRepository dietaryProfileRepository) {
         this.dietaryProfileRepository = dietaryProfileRepository;
