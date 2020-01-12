@@ -334,6 +334,253 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "Weekly Goals",
+			"item": [
+				{
+					"name": "Weekly Goals: Get Weekly Goals by User Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}:{{port}}/api/user/{{userId}}/goals",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"user",
+								"{{userId}}",
+								"goals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Weekly Goals: Create New Goal",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"goalType\": \"BREAKFAST\",\n    \"recipe\": {\n        \"recipeId\": \"1234\",\n        \"ingredients\": {\n            \"C_SWS\": {\n                \"name\": \"Swiss Cheese\",\n                \"unitName\": \"grams\",\n                \"quantity\": 90\n            },\n            \"TORT_9\": {\n                \"name\": \"Tortilla 9\\\"\",\n                \"unitName\": \"self\",\n                \"quantity\": 2\n            }\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/api/user/{{userId}}/goals",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"user",
+								"{{userId}}",
+								"goals"
+							]
+						},
+						"description": "Don't change the userId field since that is always needed. You only need to fill in fields which you are updating, other fields can be left as null."
+					},
+					"response": []
+				},
+				{
+					"name": "Weekly Goals: Update Goal by Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"goalType\": \"BREAKFAST\",\n    \"recipe\": {\n        \"recipeId\": \"1234\",\n        \"ingredients\": {\n            \"C_SWS\": {\n                \"name\": \"Swiss Cheese\",\n                \"unitName\": \"grams\",\n                \"quantity\": 50\n            },\n            \"TORT_9\": {\n                \"name\": \"Tortilla 9\\\"\",\n                \"unitName\": \"self\",\n                \"quantity\": 1\n            }\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/api/user/{{userId}}/goals/3",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"user",
+								"{{userId}}",
+								"goals",
+								"3"
+							]
+						},
+						"description": "Don't change the userId field since that is always needed. You only need to fill in fields which you are updating, other fields can be left as null."
+					},
+					"response": []
+				},
+				{
+					"name": "Weekly Goals: Complete Goal by Goal Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}:{{port}}/api/user/{{userId}}/goals/3",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"user",
+								"{{userId}}",
+								"goals",
+								"3"
+							]
+						},
+						"description": "Don't change the userId field since that is always needed. You only need to fill in fields which you are updating, other fields can be left as null."
+					},
+					"response": []
+				},
+				{
+					"name": "Weekly Goals: Reset Goals",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}:{{port}}/api/user/{{userId}}/goals/3",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"user",
+								"{{userId}}",
+								"goals",
+								"3"
+							]
+						},
+						"description": "Don't change the userId field since that is always needed. You only need to fill in fields which you are updating, other fields can be left as null."
+					},
+					"response": []
+				},
+				{
+					"name": "Weekly Goals: Delete Weekly Goals by User Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}:{{port}}/api/user/{{userId}}/goals/2",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"user",
+								"{{userId}}",
+								"goals",
+								"2"
+							]
+						},
+						"description": "This is purely a dev feature for removing profiles, you should never have to do this since removing a User removes their profile. This also only lets the user delete their own profile."
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "Pantry",
 			"item": [
 				{
@@ -391,7 +638,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"C_SWS\": {\n\t\t\"name\": \"Swiss Cheese\",\n\t\t\"quantity\": 200,\n\t\t\"unitName\": \"grams\"\n\t}\n}",
+							"raw": "{\n\t\"C_SWS\": {\n\t\t\"name\": \"Swiss Cheese\",\n\t\t\"quantity\": 200,\n\t\t\"unitName\": \"grams\"\n\t},\n\t\"TORT_9\": {\n\t\t\"name\": \"Tortilla 9\\\"\",\n\t\t\"quantity\": 5,\n\t\t\"unitName\": \"self\"\n\t}\n}",
 							"options": {
 								"raw": {
 									"language": "json"
