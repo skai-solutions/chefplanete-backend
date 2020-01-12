@@ -17,12 +17,16 @@ public class WeeklyGoalsManagementService implements WeeklyGoalsService {
 
     private final PantryService pantryService;
 
+    private final DietaryProfileService dietaryProfileService;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(WeeklyGoalsManagementService.class);
 
     public WeeklyGoalsManagementService(@NotNull final WeeklyGoalsRepository weeklyGoalsRepository,
-                                        @NotNull final PantryService pantryService) {
+                                        @NotNull final PantryService pantryService,
+                                        @NotNull final DietaryProfileService dietaryProfileService) {
         this.weeklyGoalsRepository = weeklyGoalsRepository;
         this.pantryService = pantryService;
+        this.dietaryProfileService = dietaryProfileService;
     }
 
     @Override
@@ -119,6 +123,9 @@ public class WeeklyGoalsManagementService implements WeeklyGoalsService {
                 });
                 weeklyGoalsRepository.save(weeklyGoals);
                 pantryService.updatePantry(userId, updateInventory);
+                final DietaryProfile profile = dietaryProfileService.getDietaryProfileById(userId);
+                profile.setTotalGoalsCompleted(profile.getTotalGoalsCompleted() + 1);
+                dietaryProfileService.updateDietaryProfile(profile);
                 return true;
             }
             return false;
