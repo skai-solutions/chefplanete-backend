@@ -21,4 +21,6 @@ public interface WeeklyGoalsService {
     boolean updateExistingGoal(@NotNull final String userId, @NotNull final Goal goal);
 
     boolean completeWeeklyGoal(@NotNull final String userId, @NotNull final String goalId);
+
+    boolean resetGoalStatuses(@NotNull final String userId);
 }

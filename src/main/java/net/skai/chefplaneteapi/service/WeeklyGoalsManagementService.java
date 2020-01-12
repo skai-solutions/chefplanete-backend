@@ -71,7 +71,9 @@ public class WeeklyGoalsManagementService implements WeeklyGoalsService {
         if (weeklyGoalsRepository.existsById(userId)) {
             final WeeklyGoals weeklyGoals = weeklyGoalsRepository.findById(userId).get();
             final List<Goal> goals = weeklyGoals.getGoals();
-            return goals.removeIf(g -> g.getGoalId().equals(goalId));
+            boolean isRemoved = goals.removeIf(g -> g.getGoalId().equals(goalId));
+            weeklyGoalsRepository.save(weeklyGoals);
+            return isRemoved;
         }
         return false;
     }
@@ -109,7 +111,7 @@ public class WeeklyGoalsManagementService implements WeeklyGoalsService {
                 recipe.getIngredients().forEach((s, ingredient) -> {
                     Ingredient i = inventory.get(s);
                     if (i == null) {
-                        LOGGER.warn("Goal completed with insufficient inventory.");
+                        LOGGER.warn("Goal completed with insufficient " + ingredient.getName());
                     } else {
                         i.setQuantity(i.getQuantity() - ingredient.getQuantity());
                     }
@@ -120,6 +122,17 @@ public class WeeklyGoalsManagementService implements WeeklyGoalsService {
                 return true;
             }
             return false;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean resetGoalStatuses(@NotNull final String userId) {
+        if (weeklyGoalsRepository.existsById(userId)) {
+            final WeeklyGoals weeklyGoals = weeklyGoalsRepository.findById(userId).get();
+            weeklyGoals.getGoals().forEach(goal -> goal.setComplete(false));
+            weeklyGoalsRepository.save(weeklyGoals);
+            return true;
         }
         return false;
     }

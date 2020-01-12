@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-public class WeeklyGoalsController {
+public class WeeklyGoalsController extends AbstractApiController {
 
     private final WeeklyGoalsService weeklyGoalsService;
 
@@ -61,6 +61,7 @@ public class WeeklyGoalsController {
                                @NotNull @RequestBody final Goal goal,
                                @NotNull final Principal principal) {
         if (principal.getName().equals(userId)) {
+            goal.setGoalId(goalId);
             if (!weeklyGoalsService.updateExistingGoal(userId, goal)) {
                 throw new UserNotFoundException(userId);
             }
@@ -75,6 +76,18 @@ public class WeeklyGoalsController {
                                  @NotNull final Principal principal) {
         if (principal.getName().equals(userId)) {
             if (!weeklyGoalsService.completeWeeklyGoal(userId, goalId)) {
+                throw new UserNotFoundException(userId);
+            }
+            return;
+        }
+        throw new AuthenticationException("You are not authorized for this action.", HttpStatus.UNAUTHORIZED);
+    }
+
+    @PatchMapping("/user/{userId}/goals/reset")
+    public void resetGoals(@NotNull @PathVariable("userId") final String userId,
+                           @NotNull final Principal principal) {
+        if (principal.getName().equals(userId)) {
+            if (!weeklyGoalsService.resetGoalStatuses(userId)) {
                 throw new UserNotFoundException(userId);
             }
             return;
