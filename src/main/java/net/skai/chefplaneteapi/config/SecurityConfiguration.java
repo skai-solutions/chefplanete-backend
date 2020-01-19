@@ -16,7 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Collections;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -41,10 +41,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public GoogleIdTokenVerifier idTokenVerifier(@NotNull @Value("${oauth2.resource.clientId}") final String clientId) throws GeneralSecurityException, IOException {
+    public GoogleIdTokenVerifier idTokenVerifier(@NotNull @Value("${oauth2.resource.clientIds}") final String[] clientIds) throws GeneralSecurityException, IOException {
         return new GoogleIdTokenVerifier
                 .Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance())
-                .setAudience(Collections.singletonList(clientId))
+                .setAudience(Arrays.asList(clientIds))
                 .build();
     }
 }
