@@ -14,4 +14,4 @@ Make sure Docker is installed and setup on your computer, then make sure Docker 
 2. Run the command 'docker-compose up --build'. This will start up a docker containing running the MongoDB instance exposed on port 27017.
 3. Connect to this the same as you would a regular mongo database.
 4. Keep in mind that if this container is destroyed then the data associated will also be destroyed. If the container is stopped, you must find the container id again using "docker ps -a" and start it using "docker start $CONTAINER_ID".
-5. Finally, we need to load the food database: `mongoimport -u mongo-root -p password --authenticationDatabase admin --db chefplanete fooditem_export.json` where the json is the dump downloaded from: `https://drive.google.com/file/d/1uWeJOonHygV3cYfEZ24AbAwmhJT2S-Cm/view?usp=sharing`
+5. Finally, we need to load the food database: `mongoimport -u mongo-root -p password --authenticationDatabase admin --db chefplanete foodItem.json` where the json is the dump downloaded from: `https://drive.google.com/file/d/1uWeJOonHygV3cYfEZ24AbAwmhJT2S-Cm/view?usp=sharing`
