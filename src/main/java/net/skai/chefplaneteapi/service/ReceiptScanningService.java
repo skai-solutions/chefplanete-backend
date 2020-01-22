@@ -44,6 +44,7 @@ public class ReceiptScanningService {
 
     @NotNull
     private List<List<String>> organizeText(@NotNull final String receiptText){
+
         return Collections.emptyList();
     }
 }
