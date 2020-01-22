@@ -1,6 +1,10 @@
 # Compiled class file
 *.class
 
+# Ignore Data Files
+./src/main/resources/*.json
+.idea
+
 # Log file
 *.log
 
