@@ -7,7 +7,4 @@ public interface AuthService {
 
     @NotNull
     AuthResponse login(@NotNull final String idToken);
-
-    @NotNull
-    AuthResponse signup(@NotNull final String idToken);
 }

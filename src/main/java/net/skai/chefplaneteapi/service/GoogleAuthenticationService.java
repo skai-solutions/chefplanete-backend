@@ -44,25 +44,12 @@ public class GoogleAuthenticationService implements AuthService {
                     Collections.singletonList(Role.ROLE_CLIENT));
             return new AuthResponse(token, payload.getSubject());
         } else {
-            LOGGER.warn("User with token: [" + idToken + "] is not registered.");
-            throw new AuthenticationException("This google account does not exist in our records.", HttpStatus.UNAUTHORIZED);
-        }
-    }
-
-    @Override
-    @NotNull
-    public AuthResponse signup(@NotNull final String idToken) {
-        final GoogleIdToken googleIdToken = verifyGoogleId(idToken);
-        final GoogleIdToken.Payload payload = googleIdToken.getPayload();
-        if (!userService.userExists(payload.getSubject())) {
             final String token = tokenProvider.createToken(
                     payload.getSubject(),
                     Collections.singletonList(Role.ROLE_CLIENT));
             final User newUser = new User(payload.getSubject(), payload.getEmail(), (String) payload.get("name"));
             userService.addUser(newUser);
             return new AuthResponse(token, payload.getSubject());
-        } else {
-            throw new AuthenticationException("This google account is already associated.", HttpStatus.CONFLICT);
         }
     }
 

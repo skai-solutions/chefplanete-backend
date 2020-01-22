@@ -30,9 +30,4 @@ public class AuthenticationController {
     public AuthResponse signIn(@NotNull @PathVariable final String idToken) {
         return authService.login(idToken);
     }
-
-    @GetMapping("/auth/signup/{idToken}")
-    public AuthResponse signUp(@NotNull @PathVariable final String idToken) {
-        return authService.signup(idToken);
-    }
 }
