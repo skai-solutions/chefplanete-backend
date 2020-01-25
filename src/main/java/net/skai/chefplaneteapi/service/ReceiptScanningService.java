@@ -1,5 +1,7 @@
 package net.skai.chefplaneteapi.service;
 
+import me.xdrop.fuzzywuzzy.FuzzySearch;
+import me.xdrop.fuzzywuzzy.model.ExtractedResult;
 import net.skai.chefplaneteapi.domain.FoodItem;
 import net.skai.chefplaneteapi.domain.scanning.IdentifiedIngredient;
 import org.jetbrains.annotations.NotNull;
@@ -9,9 +11,7 @@ import org.springframework.cloud.gcp.vision.CloudVisionTemplate;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,13 +38,65 @@ public class ReceiptScanningService {
     @NotNull
     public List<IdentifiedIngredient> identifyIngredientsFromImage(@NotNull final String base64EncodedImage){
         final byte[] decodedImage = Base64.getDecoder().decode(base64EncodedImage);
-        LOGGER.info(foodItemService.findFoodItemsAlphabeticallyBetween('a', 'b').stream().map(FoodItem::getFoodName).collect(Collectors.joining()));
-        return Collections.singletonList(new IdentifiedIngredient(cloudVisionTemplate.extractTextFromImage(new ByteArrayResource(decodedImage)), true));
+        final String textInReceipt = cloudVisionTemplate.extractTextFromImage(new ByteArrayResource(decodedImage));
+        final List<String> potentialReceiptItems = organizeText(textInReceipt);
+        final Collection<Character> letterRange = new HashSet<>();
+        potentialReceiptItems.forEach(item -> {
+             List<String> words = Arrays.asList(item.split(" "));
+             words.forEach(word -> letterRange.add(word.charAt(0)));
+        });
+        final List<FoodItem> foodItems = foodItemService.findFoodItemsStartingWith(letterRange);
+        final Collection<String> foodItemNames = foodItems.stream().map(FoodItem::getFoodName).collect(Collectors.toSet());
+        final Map<Character, Set<String>> foodItemsByFirstCharacter = foodItemNames.stream().collect(Collectors.groupingBy(name -> Character.toUpperCase(name.charAt(0)), Collectors.toSet()));
+        final List<IdentifiedIngredient> identifiedIngredients = new ArrayList<>();
+        for (String potentialItem : potentialReceiptItems) {
+            Set<String> sameStartStrings = foodItemsByFirstCharacter.get(Character.toUpperCase(potentialItem.charAt(0)));
+            ExtractedResult bestMatch = null;
+            if (sameStartStrings != null) {
+                bestMatch = FuzzySearch.extractOne(potentialItem, sameStartStrings);
+            }
+            if (sameStartStrings == null || bestMatch.getScore() < 80) {
+                final List<String> words = Arrays.asList(potentialItem.split(" "));
+                Collections.reverse(words);
+                for (String word : words.stream().filter(word -> word.length() >= 3).collect(Collectors.toList())) {
+                    sameStartStrings = foodItemsByFirstCharacter.get(Character.toUpperCase(word.charAt(0)));
+                    if (sameStartStrings == null) {
+                        continue;
+                    }
+                    sameStartStrings = sameStartStrings
+                            .stream()
+                            .filter(name -> word.length() <= name.length())
+                            .collect(Collectors.toSet());
+                    if (sameStartStrings.isEmpty()) continue;
+                    bestMatch = FuzzySearch.extractOne(word, sameStartStrings);
+                    if (bestMatch.getScore() >= 80) {
+                        identifiedIngredients.add(new IdentifiedIngredient(bestMatch.getString(), false));
+                        break;
+                    }
+                }
+            }
+            else if (bestMatch.getScore() >= 80){
+                identifiedIngredients.add(new IdentifiedIngredient(bestMatch.getString(), false));
+            }
+        }
+        return identifiedIngredients;
     }
 
     @NotNull
-    private List<List<String>> organizeText(@NotNull final String receiptText){
+    private List<String> getStringsBySameFirstCharacter(@NotNull final Character character,
+                                                        @NotNull final Collection<String> collection) {
+        return collection
+                .stream()
+                .filter(string -> Character.toUpperCase(string.charAt(0)) == Character.toUpperCase(character))
+                .collect(Collectors.toList());
+    }
 
-        return Collections.emptyList();
+    @NotNull
+    private List<String> organizeText(@NotNull final String receiptText){
+        final List<String> splitByNewLine = Arrays.asList(receiptText.split("\n"));
+        return splitByNewLine
+                .stream()
+                .filter(line -> !line.matches(".*\\d.*") && line.length() >= 3) // remove lines with numbers and short lines
+                .collect(Collectors.toList());
     }
 }
