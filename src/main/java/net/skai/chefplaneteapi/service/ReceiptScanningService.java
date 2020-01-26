@@ -1,6 +1,9 @@
 package net.skai.chefplaneteapi.service;
 
+import me.xdrop.fuzzywuzzy.Applicable;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
+import me.xdrop.fuzzywuzzy.algorithms.TokenSort;
+import me.xdrop.fuzzywuzzy.algorithms.WeightedRatio;
 import me.xdrop.fuzzywuzzy.model.ExtractedResult;
 import net.skai.chefplaneteapi.domain.FoodItem;
 import net.skai.chefplaneteapi.domain.scanning.IdentifiedIngredient;
@@ -16,6 +19,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class ReceiptScanningService {
+
+    // These are not ignored in the intiial TokenSort fuzzy search, only in the second one
+    private final static List<String> IGNORED_WORDS = Arrays.asList(
+            "LARGE",
+            "SMALL",
+            "MEDIUM",
+            "SUBTOTAL",
+            "TOTAL",
+            "TRANSACTION"
+    );
 
     private final CloudVisionTemplate cloudVisionTemplate;
 
@@ -43,22 +56,26 @@ public class ReceiptScanningService {
         final Collection<Character> letterRange = new HashSet<>();
         potentialReceiptItems.forEach(item -> {
              List<String> words = Arrays.asList(item.split(" "));
-             words.forEach(word -> letterRange.add(word.charAt(0)));
+             words.stream().filter(word -> !word.isEmpty()).forEach(word -> letterRange.add(Character.toUpperCase(word.charAt(0))));
         });
         final List<FoodItem> foodItems = foodItemService.findFoodItemsStartingWith(letterRange);
         final Collection<String> foodItemNames = foodItems.stream().map(FoodItem::getFoodName).collect(Collectors.toSet());
         final Map<Character, Set<String>> foodItemsByFirstCharacter = foodItemNames.stream().collect(Collectors.groupingBy(name -> Character.toUpperCase(name.charAt(0)), Collectors.toSet()));
-        final List<IdentifiedIngredient> identifiedIngredients = new ArrayList<>();
+        final Set<IdentifiedIngredient> identifiedIngredients = new HashSet<>();
         for (String potentialItem : potentialReceiptItems) {
             Set<String> sameStartStrings = foodItemsByFirstCharacter.get(Character.toUpperCase(potentialItem.charAt(0)));
             ExtractedResult bestMatch = null;
             if (sameStartStrings != null) {
-                bestMatch = FuzzySearch.extractOne(potentialItem, sameStartStrings);
+                bestMatch = FuzzySearch.extractOne(potentialItem, sameStartStrings, new TokenSort());
+            }
+            if (sameStartStrings != null && bestMatch.getScore() >= 80){
+                identifiedIngredients.add(new IdentifiedIngredient(bestMatch.getString(), false));
+                continue;
             }
             if (sameStartStrings == null || bestMatch.getScore() < 80) {
                 final List<String> words = Arrays.asList(potentialItem.split(" "));
                 Collections.reverse(words);
-                for (String word : words.stream().filter(word -> word.length() >= 3).collect(Collectors.toList())) {
+                for (String word : words.stream().filter(word -> word.length() >= 3 && !isIgnoredWord(word)).collect(Collectors.toList())) {
                     sameStartStrings = foodItemsByFirstCharacter.get(Character.toUpperCase(word.charAt(0)));
                     if (sameStartStrings == null) {
                         continue;
@@ -75,20 +92,13 @@ public class ReceiptScanningService {
                     }
                 }
             }
-            else if (bestMatch.getScore() >= 80){
-                identifiedIngredients.add(new IdentifiedIngredient(bestMatch.getString(), false));
-            }
         }
-        return identifiedIngredients;
+        return new ArrayList<>(identifiedIngredients);
     }
 
     @NotNull
-    private List<String> getStringsBySameFirstCharacter(@NotNull final Character character,
-                                                        @NotNull final Collection<String> collection) {
-        return collection
-                .stream()
-                .filter(string -> Character.toUpperCase(string.charAt(0)) == Character.toUpperCase(character))
-                .collect(Collectors.toList());
+    protected static boolean isIgnoredWord(@NotNull final String word) {
+        return IGNORED_WORDS.stream().anyMatch(ignoredWord -> ignoredWord.equalsIgnoreCase(word));
     }
 
     @NotNull
@@ -96,7 +106,22 @@ public class ReceiptScanningService {
         final List<String> splitByNewLine = Arrays.asList(receiptText.split("\n"));
         return splitByNewLine
                 .stream()
-                .filter(line -> !line.matches(".*\\d.*") && line.length() >= 3) // remove lines with numbers and short lines
+                .map(text -> text
+                        .replace("-", "")
+                        .replace("*", "")
+                        .replace("&", "")
+                        .replace("#", "")
+                        .replace("@", "")
+                        .replace("/", "")
+                        .replace("=", "")
+                        .replace("$", "")
+                        .replace("%", ""))
+                .map(text -> {
+                    List<String> tokenStrings = new ArrayList<>(Arrays.asList(text.split(" ")));
+                    tokenStrings.removeIf(token -> token.matches(".*\\d.*"));
+                    return String.join(" ", tokenStrings);
+                })
+                .filter(text -> !text.isEmpty() && text.length() >= 3)
                 .collect(Collectors.toList());
     }
 }
