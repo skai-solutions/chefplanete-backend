@@ -63,16 +63,23 @@ public class ReceiptScanningService {
         final Map<Character, Set<String>> foodItemsByFirstCharacter = foodItemNames.stream().collect(Collectors.groupingBy(name -> Character.toUpperCase(name.charAt(0)), Collectors.toSet()));
         final Set<IdentifiedIngredient> identifiedIngredients = new HashSet<>();
         for (String potentialItem : potentialReceiptItems) {
-            Set<String> sameStartStrings = foodItemsByFirstCharacter.get(Character.toUpperCase(potentialItem.charAt(0)));
+            Set<String> sameStartStrings = new HashSet<>();
+            for (String word : potentialItem.split(" ")) {
+                if (word.isEmpty()) continue;
+                Set<String> sameStarts = foodItemsByFirstCharacter.get(Character.toUpperCase(word.charAt(0)));
+                if (sameStarts != null && !sameStarts.isEmpty()) {
+                    sameStartStrings.addAll(sameStarts);
+                }
+            }
             ExtractedResult bestMatch = null;
-            if (sameStartStrings != null) {
+            if (!sameStartStrings.isEmpty()) {
                 bestMatch = FuzzySearch.extractOne(potentialItem, sameStartStrings, new TokenSort());
             }
-            if (sameStartStrings != null && bestMatch.getScore() >= 80){
+            if (!sameStartStrings.isEmpty() && bestMatch.getScore() >= 80){
                 identifiedIngredients.add(new IdentifiedIngredient(bestMatch.getString(), false));
                 continue;
             }
-            if (sameStartStrings == null || bestMatch.getScore() < 80) {
+            if (sameStartStrings.isEmpty() || bestMatch.getScore() < 80) {
                 final List<String> words = Arrays.asList(potentialItem.split(" "));
                 Collections.reverse(words);
                 for (String word : words.stream().filter(word -> word.length() >= 3 && !isIgnoredWord(word)).collect(Collectors.toList())) {
