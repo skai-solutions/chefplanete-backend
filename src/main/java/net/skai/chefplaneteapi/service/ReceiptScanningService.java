@@ -1,9 +1,7 @@
 package net.skai.chefplaneteapi.service;
 
-import me.xdrop.fuzzywuzzy.Applicable;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import me.xdrop.fuzzywuzzy.algorithms.TokenSort;
-import me.xdrop.fuzzywuzzy.algorithms.WeightedRatio;
 import me.xdrop.fuzzywuzzy.model.ExtractedResult;
 import net.skai.chefplaneteapi.domain.FoodItem;
 import net.skai.chefplaneteapi.domain.scanning.IdentifiedIngredient;

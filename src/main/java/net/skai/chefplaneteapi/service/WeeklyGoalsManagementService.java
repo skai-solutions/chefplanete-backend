@@ -58,7 +58,6 @@ public class WeeklyGoalsManagementService implements WeeklyGoalsService {
         if (weeklyGoalsRepository.existsById(userId)) {
             final WeeklyGoals weeklyGoals = weeklyGoalsRepository.findById(userId).get();
             if (weeklyGoals.getGoals().stream().noneMatch(g -> g.getGoalId().equals(goal.getGoalId()))) {
-                goal.setGoalId(Integer.toString(goal.hashCode()));
                 weeklyGoals.addNewGoal(goal);
                 weeklyGoalsRepository.save(weeklyGoals);
                 return true;

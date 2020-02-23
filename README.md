@@ -1,6 +1,9 @@
 # chefplanete-backend
 Spring Boot backend service
 
+# Setting Up the Project in IntelliJ
+1. 
+
 # Authentication
 1. Authenticate using Google, keep track of the id_token.
 2. Send the id_token to the endpoint: `GET /auth/signup/{id_token}`
