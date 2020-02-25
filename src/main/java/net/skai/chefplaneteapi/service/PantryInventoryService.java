@@ -48,7 +48,14 @@ public class PantryInventoryService implements PantryService {
         if (pantryRepository.existsById(userId)) {
             final Pantry pantry = pantryRepository.findById(userId).orElse(new Pantry(userId, new HashMap<>()));
             final Map<String, Ingredient> inventory = pantry.getInventory();
-            ingredientUpdates.forEach(inventory::put);
+            ingredientUpdates.forEach((key, value) -> {
+                if (value.getQuantity() <= 0) {
+                    inventory.remove(key);
+                }
+                else {
+                    inventory.put(key, value);
+                }
+            });
             pantryRepository.save(pantry);
             return true;
         }
