@@ -664,6 +664,113 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Receipt Scanning",
+			"item": [
+				{
+					"name": "Receipt Scanning: Get Ingredients in Receipt",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"base64Image\": \"{{receipt_base64}}\",\n\t\"imageType\": \"png\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:{{port}}/api/receipt",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"receipt"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Edamam",
+			"item": [
+				{
+					"name": "Food API: Search By Name",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://api.edamam.com/api/food-database/parser?nutrition-type=logging&app_id={{edamam_app_id}}&app_key={{edamam_app_key}}&ingr=pineapple_cheese",
+							"protocol": "https",
+							"host": [
+								"api",
+								"edamam",
+								"com"
+							],
+							"path": [
+								"api",
+								"food-database",
+								"parser"
+							],
+							"query": [
+								{
+									"key": "nutrition-type",
+									"value": "logging"
+								},
+								{
+									"key": "app_id",
+									"value": "{{edamam_app_id}}"
+								},
+								{
+									"key": "app_key",
+									"value": "{{edamam_app_key}}"
+								},
+								{
+									"key": "ingr",
+									"value": "pineapple_cheese"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"protocolProfileBehavior": {}

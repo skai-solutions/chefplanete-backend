@@ -1,11 +1,17 @@
 # chefplanete-backend
 Spring Boot backend service
 
+# Setting Up the Project in IntelliJ
+1. 
+
 # Authentication
 1. Authenticate using Google, keep track of the id_token.
 2. Send the id_token to the endpoint: `GET /auth/signup/{id_token}`
 3. If valid and successful, the backend will add you to the database and send back a token.
 4. Keep track of this token and use it to autneticate future requests to the backend in the form of a Header: `Authorization: Bearer {token}`.
+
+# JSON
+There needs to be a credentials JSON in the resources folder. Message me for the link.
 
 # Mongo DB: First Time Docker Setup
 Make sure Docker is installed and setup on your computer, then make sure Docker is running before proceeding.
