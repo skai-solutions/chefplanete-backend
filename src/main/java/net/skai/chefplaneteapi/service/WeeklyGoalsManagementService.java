@@ -1,5 +1,6 @@
 package net.skai.chefplaneteapi.service;
 
+import me.xdrop.fuzzywuzzy.FuzzySearch;
 import net.skai.chefplaneteapi.domain.*;
 import net.skai.chefplaneteapi.repository.WeeklyGoalsRepository;
 import org.jetbrains.annotations.NotNull;
@@ -107,21 +108,7 @@ public class WeeklyGoalsManagementService implements WeeklyGoalsService {
             if (goal.isPresent()) {
                 final Goal updatedGoal = goal.get();
                 updatedGoal.setComplete(true);
-                final Recipe recipe = updatedGoal.getRecipe();
-                final Pantry pantry = pantryService.getPantryByUserId(userId);
-                final Map<String, Ingredient> inventory = pantry.getInventory();
-                final Map<String, Ingredient> updateInventory = new HashMap<>();
-                recipe.getIngredients().forEach((s, ingredient) -> {
-                    Ingredient i = inventory.get(s);
-                    if (i == null) {
-                        LOGGER.warn("Goal completed with insufficient " + ingredient.getName());
-                    } else {
-                        i.setQuantity(i.getQuantity() - ingredient.getQuantity());
-                    }
-                    updateInventory.put(s, i);
-                });
                 weeklyGoalsRepository.save(weeklyGoals);
-                pantryService.updatePantry(userId, updateInventory);
                 final DietaryProfile profile = dietaryProfileService.getDietaryProfileById(userId);
                 profile.setTotalGoalsCompleted(profile.getTotalGoalsCompleted() + 1);
                 dietaryProfileService.updateDietaryProfile(profile);

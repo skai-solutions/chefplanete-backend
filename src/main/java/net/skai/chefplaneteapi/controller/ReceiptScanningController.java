@@ -33,22 +33,22 @@ public class ReceiptScanningController extends AbstractApiController {
             if (testCount == 0) {
                 testCount = 1;
                 return Arrays.asList(
-                        new IdentifiedIngredient("Apples", false),
-                        new IdentifiedIngredient("Grapes", false),
-                        new IdentifiedIngredient("Almonds", false),
-                        new IdentifiedIngredient("Milk 2%", false),
-                        new IdentifiedIngredient("Butter", false),
-                        new IdentifiedIngredient("Chives", false)
+                        new IdentifiedIngredient("apples", false),
+                        new IdentifiedIngredient("grapes", false),
+                        new IdentifiedIngredient("almonds", false),
+                        new IdentifiedIngredient("milk", false),
+                        new IdentifiedIngredient("butter", false),
+                        new IdentifiedIngredient("chives", false)
                 );
             }
             else {
                 testCount = 0;
                 return Arrays.asList(
-                        new IdentifiedIngredient("Oranges", false),
-                        new IdentifiedIngredient("Corn", false),
-                        new IdentifiedIngredient("Kidney Beans", false),
-                        new IdentifiedIngredient("White Rice", false),
-                        new IdentifiedIngredient("Fennel", false)
+                        new IdentifiedIngredient("oranges", false),
+                        new IdentifiedIngredient("corn", false),
+                        new IdentifiedIngredient("kidney beans", false),
+                        new IdentifiedIngredient("white rice", false),
+                        new IdentifiedIngredient("fennel", false)
                 );
             }
         }
